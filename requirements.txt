@@ -1,0 +1,10 @@
+python-dotenv
+jupyterlab
+ipywidgets
+gigachat
+gigachain_core
+gigachain_community
+gigachain_experimental
+gigachain_openai
+gigachain
+pandas
