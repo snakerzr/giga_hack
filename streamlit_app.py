@@ -8,6 +8,8 @@ def main():
     debug_mode = st.checkbox("DEBUG")
     st.title("Загрузка текстовых файлов")
 
+    st.write('Файлы загружайте только эти: https://github.com/snakerzr/giga_hack/tree/main/data')
+
     law_old = st.file_uploader("Загрузите старую редакцию", type=["txt"])
     law_actual = st.file_uploader("Загрузите новую редакцию", type=["txt"])
     if debug_mode:
