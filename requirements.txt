@@ -8,3 +8,5 @@ gigachain_experimental
 gigachain_openai
 gigachain
 pandas
+faiss-cpu
+streamlit
