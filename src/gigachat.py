@@ -14,42 +14,49 @@ chat = GigaChat(credentials=CREDS, scope="GIGACHAT_API_CORP", verify_ssl_certs=F
 
 def compare_summarize(old_article, new_article, system_message, instruction):
     if not system_message:
-        system_message = "Ты юрист, который хорошо разбирается в текстах законов."
+        system_message = "Ты - квалифицированный юрист, который умеет анализировать статьи законов и внесенные в них изменения."
 
     if not instruction:
-        instruction = """
-Привет! Сравни две итерации фрагмента закона и опиши юридическим языком коротко тезисно изменения:
+        instruction = """Сравни две редакции одной и той же статьи закона, принятые в разное время, и прокомментируй, используя юридическую терминологию, в чем состояли изменения.
 Старая версия закона: {old_article}
 Новая версия закона: {new_article}
-ОЧЕНЬ КОРОТКО, МАЛО СЛОВ, КРАТКО ОБОБЩИ
-    """.strip()
+Суммаризируй ответ, опиши только значимые изменения, кратко.""".strip()
 
     messages = [SystemMessage(content=system_message)]
-    messages.append(HumanMessage(content=instruction.format(old_article=old_article, new_article=new_article)))
+    messages.append(
+        HumanMessage(
+            content=instruction.format(old_article=old_article, new_article=new_article)
+        )
+    )
 
     res = chat(messages)
 
     return res.content
 
 
-async def abatch_compare_summarize(old_articles:list, new_articles:list, system_message=None, instruction_template=None):
+async def abatch_compare_summarize(
+    old_articles: list,
+    new_articles: list,
+    system_message=None,
+    instruction_template=None,
+):
     if not system_message:
-        system_message = "Ты юрист, который хорошо разбирается в текстах законов."
+        system_message = "Ты - квалифицированный юрист, который умеет анализировать статьи законов и внесенные в них изменения."
 
     if not instruction_template:
-        instruction_template = """
-Привет! Сравни две итерации фрагмента закона и опиши юридическим языком коротко тезисно изменения:
+        instruction_template = """Сравни две редакции одной и той же статьи закона, принятые в разное время, и прокомментируй, используя юридическую терминологию, в чем состояли изменения.
 Старая версия закона: {old_article}
 Новая версия закона: {new_article}
-ОЧЕНЬ КОРОТКО, МАЛО СЛОВ, КРАТКО ОБОБЩИ
-    """.strip()
-        
+Суммаризируй ответ, опиши только значимые изменения, кратко.""".strip()
+
     messages_batch = []
     for old_article, new_article in zip(old_articles, new_articles):
-        instruction = instruction_template.format(old_article=old_article, new_article=new_article)
+        instruction = instruction_template.format(
+            old_article=old_article, new_article=new_article
+        )
         messages_pair = [
             SystemMessage(content=system_message),
-            HumanMessage(content=instruction)
+            HumanMessage(content=instruction),
         ]
         messages_batch.extend(messages_pair)
 
@@ -60,7 +67,7 @@ async def abatch_compare_summarize(old_articles:list, new_articles:list, system_
 
 def generate_analysis(query, expertise, system_message, instruction):
     if not system_message:
-        system_message = "Ты юрист, который хорошо разбирается в текстах законов."
+        system_message = "Ты - квалифицированный юрист, который умеет анализировать статьи законов и внесенные в них изменения."
 
     if not instruction:
         instruction = """
@@ -69,7 +76,9 @@ def generate_analysis(query, expertise, system_message, instruction):
 Выдержки из научной работы: {expertise}
 В ответе делай отсылку к научной работе. Ответ юридическим языком:""".strip()
     messages = [SystemMessage(content=system_message)]
-    messages.append(HumanMessage(content=instruction.format(query=query, expertise=expertise)))
+    messages.append(
+        HumanMessage(content=instruction.format(query=query, expertise=expertise))
+    )
 
     res = chat(messages)
     return res.content
