@@ -33,6 +33,13 @@ def main():
     Выдержки из научной работы: {expertise}
     В ответе делай отсылку к научной работе. Ответ юридическим языком:""")
         instruction_2 = st.text_input("Введите инструкцию для экспертного анализа:")
+    else:
+        system_message_1, instruction_1, system_message_2, instruction_2 = (
+            None,
+            None,
+            None,
+            None,
+        )
 
     process_button = st.button("Обработать данные")
 
