@@ -79,7 +79,7 @@ def main():
                     query, expertise, system_message_2, instruction_2
                 )
                 if llm_checker_chain:
-                    answer = checker_chain.invoke(answer)
+                    answer = checker_chain.invoke(answer)['result']
                 final_answer += answer + "\n\n"
             st.success("Завершено!")
 
