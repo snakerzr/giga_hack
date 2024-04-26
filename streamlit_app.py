@@ -1,7 +1,7 @@
 import streamlit as st
 from src.FAISS import faiss_db
 from src.comparison import splitting_wrapped
-from src.gigachat import compare_summarize, generate_analysis
+from src.gigachat import compare_summarize, generate_analysis, checker_chain
 
 
 def main():
@@ -12,6 +12,9 @@ def main():
 
     law_old = st.file_uploader("Загрузите старую редакцию", type=["txt"])
     law_actual = st.file_uploader("Загрузите новую редакцию", type=["txt"])
+
+
+    # Модификация промптов
     if debug_mode:
         st.write("Ты - квалифицированный юрист, который умеет анализировать статьи законов и внесенные в них изменения.")
         system_message_1 = st.text_input(
@@ -43,6 +46,9 @@ def main():
             None,
         )
 
+
+
+    llm_checker_chain = st.checkbox("Верификация ответа. Сильно увеличивает время работы.")
     process_button = st.button("Обработать данные")
 
     if process_button and law_old is not None and law_actual is not None:
@@ -72,6 +78,8 @@ def main():
                 answer = generate_analysis(
                     query, expertise, system_message_2, instruction_2
                 )
+                if llm_checker_chain:
+                    answer = checker_chain.invoke(answer)
                 final_answer += answer + "\n\n"
             st.success("Завершено!")
 

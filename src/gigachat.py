@@ -1,6 +1,6 @@
 import os
-
 from langchain.schema import HumanMessage, SystemMessage
+from langchain.chains import LLMCheckerChain
 from langchain.chat_models.gigachat import GigaChat
 
 from dotenv import load_dotenv, find_dotenv
@@ -82,3 +82,6 @@ def generate_analysis(query, expertise, system_message, instruction):
 
     res = chat(messages)
     return res.content
+
+
+checker_chain = LLMCheckerChain.from_llm(chat, verbose=True)
